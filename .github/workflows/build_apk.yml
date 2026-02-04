@@ -34,7 +34,8 @@ jobs:
           rm cmdline-tools.zip
           export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
           yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses
-          sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-31" "build-tools;31.0.0" "ndk;25.2.9519653"
+          # install common packages and a newer build-tools that Buildozer may request
+          sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-31" "build-tools;31.0.0" "build-tools;36.1.0" "ndk;25.2.9519653"
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
 
@@ -59,10 +60,19 @@ jobs:
           mkdir -p ./.buildozer/android/platform/android-sdk/cmdline-tools
           cp -r ${RUNNER_TEMP}/android-sdk/cmdline-tools/latest ./.buildozer/android/platform/android-sdk/cmdline-tools/
           export PATH=./.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin:$PATH
+          # Copy pre-installed packages (build-tools, platform-tools, platforms, ndk) into Buildozer's SDK so sdkmanager won't need to install them there
+          mkdir -p ./.buildozer/android/platform/android-sdk
+          cp -r ${RUNNER_TEMP}/android-sdk/build-tools ./.buildozer/android/platform/android-sdk/ || true
+          cp -r ${RUNNER_TEMP}/android-sdk/platform-tools ./.buildozer/android/platform/android-sdk/ || true
+          cp -r ${RUNNER_TEMP}/android-sdk/platforms ./.buildozer/android/platform/android-sdk/ || true
+          cp -r ${RUNNER_TEMP}/android-sdk/ndk ./.buildozer/android/platform/android-sdk/ || true
           # Accept any SDK licenses non-interactively (may exit non-zero if already accepted)
           yes | sdkmanager --sdk_root=./.buildozer/android/platform/android-sdk --licenses || true
-          # Pre-install commonly required packages into Buildozer's SDK location
-          sdkmanager --sdk_root=./.buildozer/android/platform/android-sdk "platform-tools" "platforms;android-31" "build-tools;36.1.0" || true
+          # Double-check required package presence
+          ls -la ./.buildozer/android/platform/android-sdk/build-tools || true
+          ls -la ./.buildozer/android/platform/android-sdk/platform-tools || true
+          ls -la ./.buildozer/android/platform/android-sdk/platforms || true
+          ls -la ./.buildozer/android/platform/android-sdk/ndk || true
 
       - name: Show repo files (debug)
         run: |
