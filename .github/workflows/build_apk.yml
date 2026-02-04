@@ -53,6 +53,14 @@ jobs:
           pip install --upgrade pip setuptools wheel
           pip install buildozer==1.5.0 cython
 
+      - name: Show repo files (debug)
+        run: |
+          echo "PWD: $(pwd)"
+          ls -la
+          git rev-parse --show-toplevel || true
+          echo "Checking for buildozer.spec..."
+          if [ -f buildozer.spec ]; then echo "FOUND buildozer.spec"; head -n 40 buildozer.spec; else echo "buildozer.spec not found"; fi
+
       - name: Build APK (debug)
         run: |
           source .venv/bin/activate
