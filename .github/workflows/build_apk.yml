@@ -58,16 +58,31 @@ jobs:
         run: |
           # Ensure Buildozer's local SDK directory has the commandline tools and accepted licenses
           mkdir -p ./.buildozer/android/platform/android-sdk/cmdline-tools
-          cp -r ${RUNNER_TEMP}/android-sdk/cmdline-tools/latest ./.buildozer/android/platform/android-sdk/cmdline-tools/
-          export PATH=./.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin:$PATH
+          cp -r ${RUNNER_TEMP}/android-sdk/cmdline-tools/latest ./.buildozer/android/platform/android-sdk/cmdline-tools/ || true
+          # Some tools expect the legacy tools/ layout; copy sdkmanager into tools/bin so Buildozer's calls find it
+          mkdir -p ./.buildozer/android/platform/android-sdk/tools/bin
+          cp ./.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager ./.buildozer/android/platform/android-sdk/tools/bin/ || true
+          export PATH=./.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin:./.buildozer/android/platform/android-sdk/tools/bin:$PATH
+
           # Copy pre-installed packages (build-tools, platform-tools, platforms, ndk) into Buildozer's SDK so sdkmanager won't need to install them there
           mkdir -p ./.buildozer/android/platform/android-sdk
           cp -r ${RUNNER_TEMP}/android-sdk/build-tools ./.buildozer/android/platform/android-sdk/ || true
           cp -r ${RUNNER_TEMP}/android-sdk/platform-tools ./.buildozer/android/platform/android-sdk/ || true
           cp -r ${RUNNER_TEMP}/android-sdk/platforms ./.buildozer/android/platform/android-sdk/ || true
           cp -r ${RUNNER_TEMP}/android-sdk/ndk ./.buildozer/android/platform/android-sdk/ || true
-          # Accept any SDK licenses non-interactively (may exit non-zero if already accepted)
-          yes | sdkmanager --sdk_root=./.buildozer/android/platform/android-sdk --licenses || true
+
+          # Accept any SDK licenses non-interactively for the Buildozer SDK root
+          yes | ./.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=./.buildozer/android/platform/android-sdk --licenses || true
+
+          # Make sure the required build-tools are installed into Buildozer SDK root (install if missing)
+          ./.buildozer/android/platform/android-sdk/cmdline-tools/latest/bin/sdkmanager --sdk_root=./.buildozer/android/platform/android-sdk "build-tools;36.1.0" || true
+
+          # Set ANDROID_* env vars for the rest of the workflow to point at Buildozer's SDK
+          echo "ANDROID_HOME=$(pwd)/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$(pwd)/.buildozer/android/platform/android-sdk" >> $GITHUB_ENV
+          ndkdir=$(ls -d ./.buildozer/android/platform/android-sdk/ndk/* | sort -V | tail -n1 || true)
+          echo "ANDROID_NDK_ROOT=$ndkdir" >> $GITHUB_ENV
+
           # Double-check required package presence
           ls -la ./.buildozer/android/platform/android-sdk/build-tools || true
           ls -la ./.buildozer/android/platform/android-sdk/platform-tools || true

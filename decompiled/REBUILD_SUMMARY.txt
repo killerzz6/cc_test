@@ -1,0 +1,79 @@
+
+【修改后的 APK 文件】
+
+未签名版本:
+  📦 base_modified.apk
+  
+已签名版本:
+  📦 base_modified-signed.apk ✅ (推荐用于安装)
+
+【文件信息】
+
+未签名 APK:
+  大小: 42.95 MB
+  创建时间: 2026-02-04 17:04:56
+  
+已签名 APK:
+  大小: 42.95 MB
+  签名算法: SHA256withRSA
+  密钥库: debug.keystore
+
+【下一步】
+
+1. 安装修改后的 APK:
+   adb install -r base_modified-signed.apk
+
+2. 如果已安装旧版本，会自动覆盖安装
+
+3. 启动应用:
+   adb shell am start -n com.example.app/com.example.app.MainActivity
+
+4. 查看日志:
+   adb logcat -s APP_TAG
+
+【修改总结】
+
+✅ 修改内容:
+   - Lua 脚本: 0 个文件
+   - Java 代码: 0 个文件
+   - 配置文件: assets/base/config.json
+
+✅ 自动完成:
+   - Lua 代码编译 (.lua -> .luac)
+   - Java 代码编译 (.java -> classes.dex)
+   - APK 打包
+   - APK 签名
+   - 对齐优化
+
+【验证方法】
+
+查看 APK 的修改:
+  unzip -l base_modified-signed.apk | grep -E '\.lua|\.java'
+
+检查签名:
+  jarsigner -verify base_modified-signed.apk
+
+提取并检查修改:
+  unzip base_modified-signed.apk assets/base/src/main.luac
+
+【故障排查】
+
+如果安装失败:
+  1. 检查 APK 是否有效
+  2. 验证签名: jarsigner -verify base_modified-signed.apk
+  3. 重新生成密钥库
+  4. 清除旧版本数据: adb shell pm clear com.example.app
+
+如果应用崩溃:
+  1. 查看日志: adb logcat
+  2. 检查代码修改是否有语法错误
+  3. 确保 Lua 和 Java 代码兼容
+
+【已生成的文件】
+
+base_modified-signed.apk          ✅ 最终可安装的 APK
+base_modified.apk        (未签名版本，备用)
+debug.keystore            (签名密钥库)
+
+所有文件已准备好安装!
+

@@ -1,7 +1,0 @@
-# requirements.txt - Python 依赖包
-
-kivy>=2.3.0
-buildozer>=1.4.6
-cython==0.29.32
-# android-permissions>=0.4.0
-pyjnius>=1.4.5

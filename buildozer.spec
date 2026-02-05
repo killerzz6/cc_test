@@ -10,7 +10,7 @@ source.include_exts = py,png,jpg,kv,atlas
 
 # 版本信息
 version = 1.0
-requirements = python3,kivy
+requirements = python3,kivy==2.3.0,pillow
 
 # 权限配置
 android.permissions = SYSTEM_ALERT_WINDOW,INTERNET,ACCESS_NETWORK_STATE

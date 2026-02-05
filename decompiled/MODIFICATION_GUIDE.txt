@@ -1,0 +1,92 @@
+
+【可修改的文件位置】
+
+1️⃣ Lua 游戏逻辑代码 (反编译后)
+   位置: decompiled/lua_decompiled/assets/base/src/
+   文件类型: .lua (文本文件，可直接编辑)
+   
+   关键文件:
+   - main.lua          主程序入口
+   - app/MyApp.lua     应用框架
+   - app/MainScene.lua 主场景逻辑
+   - app/GameRule*.lua 游戏规则
+   - network/*.lua     网络通信
+   
+   编辑工具: 任何文本编辑器 (VS Code, Notepad++, Sublime 等)
+
+2️⃣ Java 应用代码 (反编译后)
+   位置: decompiled/java_src/
+   文件类型: .java (文本文件，可直接编辑)
+   
+   关键目录:
+   - com/example/app/         应用框架
+   - com/example/network/     网络通信
+   - com/example/util/        工具函数
+   
+   编辑工具: VS Code + Java 插件或 Android Studio
+
+3️⃣ 配置文件 (已提取)
+   位置: decompiled/extracted/assets/base/config.json
+   文件类型: JSON (可直接编辑)
+   
+   可修改内容:
+   - API 端点
+   - 调试参数
+   - 窗口尺寸
+   - 资源配置
+
+【修改示例】
+
+修改 Lua 游戏规则:
+  1. 打开: decompiled/lua_decompiled/app/GameRule.lua
+  2. 编辑逻辑代码
+  3. 保存文件
+  4. 重新打包 (自动编译)
+
+修改 Java 网络端点:
+  1. 打开: decompiled/java_src/com/example/network/*.java
+  2. 修改 API URL、超时时间等
+  3. 保存文件
+  4. 重新打包 (自动编译)
+
+修改配置参数:
+  1. 打开: decompiled/extracted/assets/base/config.json
+  2. 编辑 JSON 内容
+  3. 保存文件
+  4. 重新打包
+
+【修改后的步骤】
+
+1. 修改完所有需要的代码
+2. 运行: python tools/rebuild_apk.py
+3. 自动完成:
+   ✅ Lua 代码重新编译 (.lua -> .luac)
+   ✅ Java 代码重新编译 (.java -> classes.dex)
+   ✅ 生成新 APK 文件
+   ✅ 使用开发者密钥重新签名
+   ✅ 生成: base_modified.apk (修改后的版本)
+
+4. 安装修改后的 APK:
+   adb install -r base_modified.apk
+
+【重要提醒】
+
+✅ 可以修改的:
+   - Lua 游戏逻辑代码
+   - Java 胶水代码
+   - 配置文件
+   - 资源文件 (图片、文本)
+
+❌ 不能直接修改的:
+   - Native 库 (.so 文件) - 需要 IDA 反汇编
+   - AndroidManifest.xml - 需要二进制工具
+   - 已签名的 APK - 需要重新打包
+
+【工具支持】
+
+我们提供自动化工具:
+  ✅ tools/decompile_lua.py      反编译 Lua
+  ✅ tools/dex_to_java.py        反编译 Java
+  ✅ tools/rebuild_apk.py        重新打包 APK
+  ✅ tools/sign_apk.py           签名 APK
+

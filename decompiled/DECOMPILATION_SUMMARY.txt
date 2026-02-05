@@ -1,0 +1,214 @@
+
+================================================================================
+【APK 反编译总结报告】
+================================================================================
+
+生成时间: 2026-02-04 16:50:53
+提取目录: decompiled/extracted
+
+================================================================================
+【APK 基本信息】
+================================================================================
+
+应用名称: GloryProject
+类型: Cocos2d-x + Lua 游戏引擎
+平台: Android (ARM64)
+签名: 有效 (至 2053-03-08)
+
+================================================================================
+【文件统计】
+================================================================================
+
+【代码文件】
+  - Lua 脚本文件 (.luac): 78 个
+  - Native 库 (.so):       3 个
+  - XML 配置:              166 个
+  - 图片资源 (.png):       185 个
+
+【文件大小】
+  - classes.dex (Java 字节码):       5.01 MB
+  - assets/ (游戏资源):              34.48 MB
+  - lib/ (本地库):                  22.60 MB
+  - 总计:                            62.09 MB
+
+================================================================================
+【Lua 脚本分析】
+================================================================================
+
+发现 78 个编译的 Lua 文件 (.luac)
+
+目录结构:
+
+  根目录 (.luac 脚本): 2 个
+  📁 app/ : 13 个文件
+  📁 cocos/ : 60 个文件
+  📁 config.luac/ : 1 个文件
+  📁 main.luac/ : 1 个文件
+  📁 packages/ : 3 个文件
+
+主要 Lua 文件:
+  ✅ assets/base/src/main.luac (0.3 KB)
+  ✅ assets/base/src/config.luac (0.2 KB)
+  ✅ assets/base/src/app/MyApp.luac (0.9 KB)
+
+
+【Native 库分析】
+================================================================================
+
+发现 3 个 Native 库 (.so 文件)
+
+  📦 lib\arm64-v8a\libcocos2dlua.so
+      大小: 21858.6 KB
+      架构: ARM64
+      类型: Cocos2d-x Lua 引擎
+  📦 lib\arm64-v8a\libCrashSight.so
+      大小: 1067.4 KB
+      架构: ARM64
+      类型: Tencent 崩溃上报
+  📦 lib\arm64-v8a\libmp3lame.so
+      大小: 217.8 KB
+      架构: ARM64
+      类型: MP3 音频编码
+
+
+【架构信息】
+================================================================================
+
+应用核心引擎: Cocos2d-x (C++游戏引擎)
+脚本层: Lua (动态脚本编程)
+业务层: Lua (游戏逻辑)
+平台适配层: Java (Android 系统接口)
+Native 层: C++ (性能关键)
+
+技术栈:
+  - 游戏引擎: Cocos2d-x (跨平台)
+  - 脚本语言: Lua (编译为 .luac)
+  - 网络框架: Retrofit2 + OkHttp3 (异步 HTTP)
+  - JSON: Alibaba FastJSON (序列化)
+  - 社交集成: WeChat SDK
+  - 定位服务: AMap (高德地图)
+  - 崩溃上报: Tencent CrashSight
+
+【配置文件】
+================================================================================
+
+config.json 内容:
+  - 应用名称: GloryProject
+  - 窗口模式: 横屏 (1280x720)
+  - 入口脚本: base/src/main.lua
+  - 调试端口: 6050
+  - 上传端口: 6060
+
+【权限分析】
+================================================================================
+
+从提取的资源推断的权限:
+
+【CRITICAL RISK - 关键】
+  ❌ android.permission.SEND_SMS
+  ❌ android.permission.READ_SMS
+  ❌ android.permission.READ_CALL_LOG
+  ❌ android.permission.READ_CONTACTS
+
+【HIGH RISK - 高风险】
+  ⚠️  android.permission.ACCESS_FINE_LOCATION (精确定位)
+  ⚠️  android.permission.CAMERA (相机)
+  ⚠️  android.permission.RECORD_AUDIO (录音)
+
+【MEDIUM RISK - 中等风险】
+  ⚠️  android.permission.INTERNET
+  ⚠️  android.permission.ACCESS_NETWORK_STATE
+  ⚠️  android.permission.READ_EXTERNAL_STORAGE
+  ⚠️  android.permission.WRITE_EXTERNAL_STORAGE
+
+【安全问题清单】
+================================================================================
+
+【已识别问题】
+
+1. 依赖库漏洞
+   - Alibaba FastJSON 版本过旧 (已知 RCE 漏洞)
+   - Apache HttpClient 已停止维护
+   
+   建议: 升级至最新版本，见 APK_SECURITY_AUDIT_REPORT.txt
+
+2. 无代码混淆
+   - Java 代码可被直接反编译
+   - Lua 代码虽然编译，但可被反编译
+   
+   建议: 启用 ProGuard/R8 混淆和 Lua 加密
+
+3. 权限过度申请
+   - 关键权限 (SMS, 通讯录, 通话记录) 风险高
+   - 精确位置持续跟踪
+   
+   建议: 审查必要性，最小化权限申请
+
+4. 第三方 SDK 风险
+   - WeChat SDK (闭源，无法审计)
+   - AMap (持续位置跟踪)
+   - Tencent CrashSight (隐私数据上报)
+   
+   建议: 定期审计，选择可信供应商
+
+5. 网络通信安全
+   - 未检测到 SSL 证书绑定
+   - 可能存在中间人攻击风险
+   
+   建议: 实施 Certificate Pinning
+
+【反编译后续】
+================================================================================
+
+为获得完整的源代码，需要执行:
+
+1. 反编译 Lua 脚本 (游戏逻辑):
+   $ python tools/decompile_lua.py
+   输出: decompiled/lua_decompiled/
+
+2. 反编译 Java 代码 (应用框架):
+   $ python tools/dex_to_java.py
+   输出: decompiled/java_src/
+
+3. 手动分析 Native 库 (可选):
+   使用 IDA Pro 或 Ghidra 分析 .so 文件
+   需要 ARM64 汇编和 C++ 知识
+
+【重要提醒】
+================================================================================
+
+这份报告是在安全审计框架内生成的。
+
+反编译代码仅用于:
+  ✅ 内部安全审计
+  ✅ 代码维护和升级
+  ✅ 漏洞修复
+  ✅ 性能优化
+
+禁止用于:
+  ❌ 未授权的代码修改
+  ❌ 知识产权侵犯
+  ❌ 恶意软件开发
+  ❌ 未经许可的重新发布
+
+【关键文件】
+================================================================================
+
+完整反编译导航指南:
+  decompiled/extracted/DECOMPILATION_GUIDE.txt
+
+安全审计报告:
+  APK_SECURITY_AUDIT_REPORT.txt
+
+修复建议:
+  SECURITY_AUDIT_TODO.txt
+
+================================================================================
+【反编译完成】
+================================================================================
+
+所有提取的文件已保存到: decompiled/extracted
+
+下一步: 运行后续反编译脚本获取源代码
+  $ python tools/decompile_lua.py     # 反编译 Lua
+  $ python tools/dex_to_java.py       # 反编译 Java

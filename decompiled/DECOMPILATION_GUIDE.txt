@@ -1,0 +1,195 @@
+
+================================================================================
+【APK 反编译导航指南】
+生成时间: 2026-02-04 16:49:50
+================================================================================
+
+【快速导航】
+
+📁 APK 解压目录:
+   decompiled\extracted
+
+【关键目录】
+
+1. Lua 脚本代码:
+   decompiled\extracted\assets/base/src
+   
+   包含所有游戏逻辑代码 (.luac 编译文件)
+   需要使用 unluac 工具反编译
+   
+   命令:
+   $ python tools/decompile_lua.py
+
+2. 游戏配置文件:
+   decompiled\extracted\assets/base/config.json
+   
+   包含应用配置、API 端点、参数等
+   可以直接用文本编辑器查看
+
+3. Java 字节码:
+   decompiled\extracted\classes.dex
+   
+   包含所有 Java 胶水代码
+   需要 dex2jar + CFR 反编译
+   
+   命令:
+   $ python tools/dex_to_java.py
+
+4. Native 库:
+   decompiled\extracted\lib
+   
+   ARM64 库: lib/arm64-v8a/
+   ARM32 库: lib/armeabi-v7a/
+   
+   需要 IDA Pro 或 Ghidra 逆向
+
+5. UI 资源:
+   decompiled\extracted\res
+   decompiled\extracted\assets/base/res/client.zip
+   
+   包含游戏 UI 和美术资源
+
+【文件列表】
+
+DEX 字节码:
+  decompiled\extracted\classes.dex
+
+资源文件:
+  decompiled\extracted\resources.arsc
+
+应用清单:
+  decompiled\extracted\AndroidManifest.xml
+
+签名证书:
+  decompiled\extracted\META-INF
+
+【反编译步骤】
+
+步骤 1: 反编译 Lua 脚本 (游戏逻辑)
+  $ python tools/decompile_lua.py
+  
+  输出: decompiled/lua_decompiled/
+
+步骤 2: 反编译 Java 代码 (应用框架)
+  $ python tools/dex_to_java.py
+  
+  输出: decompiled/java_src/
+
+步骤 3: 分析 Native 库 (可选)
+  使用 IDA Pro 或 Ghidra 分析:
+    decompiled\extracted\lib/arm64-v8a/libcocos2dlua.so
+    decompiled\extracted\lib/arm64-v8a/libCrashSight.so
+
+【关键信息】
+
+配置文件 (config.json):
+  包含 API 端点、服务器地址、参数配置
+  路径: decompiled\extracted\assets/base/config.json
+
+Lua MVC 架构:
+  models/  - 数据模型
+  views/   - UI 视图
+  controllers/ - 业务逻辑
+  
+  位置: decompiled\extracted\assets/base/src
+
+第三方 SDK:
+  - WeChat SDK (社交/支付)
+  - AMap (地理位置)
+  - Tencent CrashSight (崩溃上报)
+  - Retrofit2/OkHttp3 (网络)
+  - Alibaba FastJSON (JSON)
+
+【安全检查清单】
+
+反编译后需要检查:
+
+□ 硬编码的 API 密钥和密码
+  搜索: "api_key", "secret", "token", "password"
+
+□ 敏感 URL 和端点
+  搜索: "http://", "https://", ".com", "/api/"
+
+□ 不安全的网络通信
+  搜索: "HttpClient", "exec", "Runtime.getRuntime"
+
+□ 数据泄露风险
+  搜索: "SharedPreferences", "database", "log", "send"
+
+□ 权限滥用
+  搜索: "getDeviceId", "getIMEI", "getLocation", "readSMS"
+
+□ 代码注入漏洞
+  搜索: "eval", "loadDex", "reflection", "getDeclaredMethod"
+
+【输出文件说明】
+
+DECOMPILATION_REPORT.txt
+  - 详细的反编译报告
+  - 文件列表统计
+  - 发现的关键信息
+
+DECOMPILATION_GUIDE.txt (本文件)
+  - 导航和快速参考
+
+lua_decompiled/
+  - 反编译后的 Lua 源代码
+  - 游戏逻辑代码
+
+java_src/
+  - 反编译后的 Java 源代码
+  - 应用框架代码
+
+【推荐查看顺序】
+
+1️⃣ config.json (快速获取应用信息)
+   $ type decompiled\extracted\assets/base/config.json
+
+2️⃣ Lua 脚本 (理解游戏逻辑)
+   $ Get-ChildItem 'decompiled\extracted\assets/base/src' -Recurse
+
+3️⃣ Java 代码 (理解应用框架)
+   $ ls decompiled/java_src/
+
+4️⃣ AndroidManifest.xml (权限和组件)
+   $ file decompiled\extracted\AndroidManifest.xml
+
+【常用命令】
+
+查找特定字符串:
+  $ Get-ChildItem decompiled -Recurse | Select-String "api_key|password|secret"
+
+统计代码行数:
+  $ (Get-ChildItem decompiled/lua_decompiled -Recurse -Filter '*.lua' | 
+     Measure-Object -Property Length -Sum).Sum
+
+查找网络调用:
+  $ Select-String -Path 'decompiled/java_src/*.java' -Pattern 'http|socket|request'
+
+【需要的工具】
+
+✅ 已有:
+  - Java JDK (反编译工具需要)
+  - Python 3 (脚本执行)
+  - PowerShell (命令行)
+
+📥 需要下载:
+  - unluac (Lua 反编译): https://sourceforge.net/projects/unluac/
+  - dex2jar (DEX 转 JAR): https://github.com/ThexXTURBOXx/dex2jar
+  - CFR (JAR 反编译): https://www.benf.org/other/cfr/cfr.jar
+
+【下一步】
+
+1. 运行 Lua 反编译:
+   $ python tools/decompile_lua.py
+
+2. 运行 Java 反编译:
+   $ python tools/dex_to_java.py
+
+3. 分析关键信息:
+   $ code decompiled/
+
+4. 生成安全审计报告:
+   $ python tools/final_security_report.py
+
+================================================================================
