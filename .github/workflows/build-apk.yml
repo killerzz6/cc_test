@@ -83,13 +83,13 @@ jobs:
         name: android-apk
         path: bin/*.apk
         retention-days: 30
+        if-no-files-found: ignore
 
     - name: Upload build logs (if failed)
       if: failure()
       uses: actions/upload-artifact@v4
       with:
         name: build-logs
-        path: |
-          .buildozer/logs/
-          *.log
+        path: .buildozer/
         retention-days: 7
+        if-no-files-found: ignore
