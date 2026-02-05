@@ -10,13 +10,10 @@ source.include_exts = py,png,jpg,kv,atlas
 
 # 版本信息
 version = 1.0
-requirements = python3,kivy==2.3.0,pillow
+requirements = python3,kivy
 
 # 权限配置
-android.permissions = SYSTEM_ALERT_WINDOW,INTERNET,ACCESS_NETWORK_STATE
-
-# 特性配置
-android.features = android.hardware.touchscreen
+android.permissions = INTERNET
 
 # 架构 (只用 arm64-v8a 加快构建速度)
 android.archs = arm64-v8a
@@ -31,9 +28,11 @@ fullscreen = 0
 android.api = 33
 android.minapi = 21
 android.ndk = 25b
-
-# 接受 SDK 许可
+android.skip_update = False
 android.accept_sdk_license = True
+
+# P4A 配置
+p4a.branch = master
 
 [buildozer]
 # 日志级别
